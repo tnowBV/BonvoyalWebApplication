@@ -1,4 +1,4 @@
-package com.bonvoyal.templates;
+package com.bonvoyal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * <p>This class bootstraps the application using {@link SpringApplication}</p>
  *
- * @author Terrell
+ * @author tnowBV
  */
 @SpringBootApplication
-public class GradleApplication {
+public class BonvoyalWebApplication {
 
     /**
      * The main method which serves as the entry point of the application.
@@ -19,7 +19,7 @@ public class GradleApplication {
      * @param args Command-line arguments passed during application startup.
      */
     public static void main(final String[] args) {
-        SpringApplication.run(GradleApplication.class, args);
+        SpringApplication.run(BonvoyalWebApplication.class, args);
     }
 
 }

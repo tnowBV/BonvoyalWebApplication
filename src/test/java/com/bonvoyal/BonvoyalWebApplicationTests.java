@@ -1,14 +1,14 @@
-package com.bonvoyal.templates;
+package com.bonvoyal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GradleApplicationTests {
+class BonvoyalWebApplicationTests {
 
     @Test
     void testMainMethod() {
-        GradleApplication.main(new String[]{});
+        BonvoyalWebApplication.main(new String[]{});
     }
 
 }
