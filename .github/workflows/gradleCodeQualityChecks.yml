@@ -1,0 +1,58 @@
+name: GradleCICDTemplate
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  pr_checks:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout package
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Grant execute permissions to Gradle wrapper
+        run: chmod +x gradlew
+
+      - name: Read Checkstyle version from gradle.properties
+        id: load_version
+        run: |
+          CHECKSTYLE_VERSION=$(grep "^checkstyle.version=" gradle.properties | cut -d'=' -f2)
+          echo "checkstyle_version=$CHECKSTYLE_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Run Checkstyle
+        uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          checkstyle_config: './config/checkstyle/checkstyle.xml'
+          level: error
+          checkstyle_version: ${{ steps.load_version.outputs.checkstyle_version }}
+          fail_level: error
+
+      - name: Run Assemble
+        run: ./gradlew assemble
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+
+      - name: Run Code Coverage Verification
+        run: ./gradlew jacocoTestCoverageVerification
+
+
+
