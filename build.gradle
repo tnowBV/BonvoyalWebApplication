@@ -45,12 +45,13 @@ jacocoTestCoverageVerification {
     }
 }
 
+check.dependsOn(jacocoTestCoverageVerification)
 
 group = 'com.bonvoyal'
 version = '0.0.1-SNAPSHOT'
 
 application {
-    mainClass.set('com.bonvoyal.templates.GradleApplication')
+    mainClass.set('com.bonvoyal.tripform.BonvoyalWebApplication')
 }
 
 java {
@@ -75,6 +76,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

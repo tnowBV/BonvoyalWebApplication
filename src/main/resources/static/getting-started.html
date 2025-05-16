@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BonVoyal - Get Started</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_orange.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fdfbfb;
+            color: #2d3436;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            background: white;
+            overflow: hidden;
+            position: relative;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s ease-in-out;
+        }
+        .slide.active {
+            position: relative;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .btn-custom {
+            background-color: #ffbe76;
+            color: #2d3436;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container form-container">
+    <h2 class="mb-4">Let’s Plan Your Trip</h2>
+    <form id="onboardingForm">
+        <div class="slide active">
+            <label for="destination" class="form-label">Where are you going?</label>
+            <input type="text" class="form-control" id="destination" required>
+            <button type="button" class="btn btn-custom mt-3 next">Next</button>
+        </div>
+        <div class="slide">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="text" class="form-control mb-3" id="startDate" required>
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="text" class="form-control" id="endDate" required>
+            <button type="button" class="btn btn-custom mt-3 next">Next</button>
+        </div>
+        <div class="slide">
+            <label for="interests" class="form-label">What are your interests?</label>
+            <select id="interests" class="form-select" multiple required>
+                <option value="beaches">Beaches</option>
+                <option value="food">Local Food</option>
+                <option value="jazz">Live Jazz</option>
+                <option value="history">Historical Sites</option>
+                <option value="aquariums">Aquariums</option>
+                <option value="hiking">Hiking</option>
+                <option value="shellfish">Shellfish</option>
+                <option value="pop">Pop Music</option>
+            </select>
+            <button type="submit" class="btn btn-custom mt-3">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#startDate", {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "F j, Y"
+    });
+    flatpickr("#endDate", {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "F j, Y"
+    });
+
+    const slides = document.querySelectorAll('.slide');
+    const nextButtons = document.querySelectorAll('.next');
+    let currentSlide = 0;
+
+    nextButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide++;
+            if (currentSlide < slides.length) {
+                slides[currentSlide].classList.add('active');
+            }
+        });
+    });
+
+    document.getElementById('onboardingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = {
+            destination: document.getElementById('destination').value,
+            startDate: document.getElementById('startDate').value,
+            endDate: document.getElementById('endDate').value,
+            interests: Array.from(document.getElementById('interests').selectedOptions).map(opt => opt.value)
+        };
+
+        fetch('http://localhost:8080/api/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Thanks for submitting!');
+                } else {
+                    alert('Submission failed!');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Something went wrong.');
+            });
+    });
+</script>
+</body>
+</html>

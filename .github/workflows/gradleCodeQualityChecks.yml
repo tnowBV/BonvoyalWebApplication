@@ -1,4 +1,4 @@
-name: GradleCICDTemplate
+name: GradleCICD
 on:
   pull_request:
     branches: ["main"]
