@@ -51,7 +51,7 @@ group = 'com.bonvoyal'
 version = '0.0.1-SNAPSHOT'
 
 application {
-    mainClass.set('com.bonvoyal.tripform.BonvoyalWebApplication')
+    mainClass.set('com.bonvoyal.BonvoyalWebApplication')
 }
 
 java {
