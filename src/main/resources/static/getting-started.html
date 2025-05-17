@@ -115,7 +115,7 @@
             interests: Array.from(document.getElementById('interests').selectedOptions).map(opt => opt.value)
         };
 
-        fetch('http://localhost:8080/api/submit', {
+        fetch('/api/submit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
