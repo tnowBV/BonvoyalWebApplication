@@ -1,11 +1,10 @@
 name: Deploy to Beta
 on:
-  pull_request:
-    types: [closed]
+  workflow_run:
+    workflows: [ 'Validate' ]
+    types: [ completed ]
     branches:
       - main
-  push:
-    branches: [ "main" ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,4 +14,3 @@ jobs:
         with:
           service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
           api-key: ${{ secrets.MY_RENDER_API_KEY }}
-          wait-for-success: true
