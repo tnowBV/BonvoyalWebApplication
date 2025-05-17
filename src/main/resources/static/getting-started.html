@@ -56,6 +56,11 @@
             <button type="button" class="btn btn-custom mt-3 next">Next</button>
         </div>
         <div class="slide">
+            <label for="age" class="form-label">What is your age?</label>
+            <input type="number" class="form-control" id="age" required>
+            <button type="button" class="btn btn-custom mt-3 next">Next</button>
+        </div>
+        <div class="slide">
             <label for="startDate" class="form-label">Start Date</label>
             <input type="text" class="form-control mb-3" id="startDate" required>
             <label for="endDate" class="form-label">End Date</label>
@@ -73,6 +78,33 @@
                 <option value="hiking">Hiking</option>
                 <option value="shellfish">Shellfish</option>
                 <option value="pop">Pop Music</option>
+            </select>
+            <button type="button" class="btn btn-custom mt-3 next">Next</button>
+        </div>
+        <div class="slide">
+            <label for="dietaryRestrictions" class="form-label">What are your Dietary restrictions?</label>
+            <select id="dietaryRestrictions" class="form-select" multiple required>
+                <option value="NONE">None</option>
+                <option value="VEGETARIAN">Vegetarian</option>
+                <option value="VEGAN">Vegan</option>
+                <option value="GLUTEN_FREE">Gluten Free</option>
+                <option value="DAIRY_FREE">Dairy Free</option>
+                <option value="HALAL">Halal</option>
+                <option value="KOSHER">Kosher</option>
+                <option value="NUT_ALLERGY">Nut Allergy</option>
+                <option value="SHELLFISH_ALLERGY">Shellfish Allergy</option>
+            </select>
+            <button type="button" class="btn btn-custom mt-3 next">Next</button>
+        </div>
+        <div class="slide">
+            <label for="transportPreferences" class="form-label">What are your travel preferences?</label>
+            <select id="transportPreferences" class="form-select" multiple required>
+                <option value="WALKING">Walking</option>
+                <option value="RIDE_SHARE">Ride-share</option>
+                <option value="TAXI">Taxi</option>
+                <option value="PUBLIC_TRANSIT">Public Transit</option>
+                <option value="RENTAL_CAR">Rental</option>
+                <option value="PRIVATE_DRIVER">Private Driver</option>
             </select>
             <button type="submit" class="btn btn-custom mt-3">Submit</button>
         </div>
@@ -112,7 +144,9 @@
             destination: document.getElementById('destination').value,
             startDate: document.getElementById('startDate').value,
             endDate: document.getElementById('endDate').value,
-            interests: Array.from(document.getElementById('interests').selectedOptions).map(opt => opt.value)
+            interests: Array.from(document.getElementById('interests').selectedOptions).map(opt => opt.value),
+            dietaryRestrictions: Array.from(document.getElementById('dietaryRestrictions').selectedOptions).map(opt => opt.value),
+            transportPreferences: Array.from(document.getElementById('transportPreferences').selectedOptions).map(opt => opt.value)
         };
 
         fetch('/api/submit', {
