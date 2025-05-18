@@ -1,6 +1,11 @@
-package com.bonvoyal.tripform.controller;
+package com.bonvoyal.trip.controller;
 
-import com.bonvoyal.tripform.dto.TripFormData;
+import com.bonvoyal.trip.dto.TripFormData;
+import com.bonvoyal.trip.entities.Trip;
+import com.bonvoyal.trip.service.TripService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * REST controller for handling trip form submissions.
  *
  * <p>This controller exposes an endpoint for clients to submit trip planning data, such as
- * destination, travel dates, and user interests. It accepts POST requests and returns a
+ * destination, travel dates, and user hobbies. It accepts POST requests and returns a
  * confirmation message.</p>
  *
  * <p>{@code @CrossOrigin} is configured to allow requests from any origin during development.
@@ -19,10 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author tnowBV
  */
+@Slf4j
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "*") // Allow all origins for dev
 public class TripFormController {
+
+    @Autowired
+    TripService tripService;
 
     /**
      * Handles POST requests for trip form submission.
@@ -35,8 +44,14 @@ public class TripFormController {
      * @return a simple success message confirming receipt of the form
      */
     @PostMapping("/submit")
-    public String handleSubmit(@RequestBody TripFormData formData) {
-        System.out.println("Received form data: " + formData);
-        return "Form received!";
+    public ResponseEntity<String> handleSubmit(@RequestBody final TripFormData formData) {
+        if (tripService.validateForm(formData)) {
+            final Trip savedTrip = tripService.saveTrip(tripService.convertDtoToEntity(formData));
+            return ResponseEntity.ok("Form received! Here is your trip ID: " + savedTrip.getId());
+        } else {
+            return ResponseEntity.badRequest().body("Form validation failed!");
+        }
     }
+
+
 }
