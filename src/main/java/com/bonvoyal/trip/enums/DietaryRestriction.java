@@ -1,4 +1,4 @@
-package com.bonvoyal.tripform.enums;
+package com.bonvoyal.trip.enums;
 
 /**
  * Enum representing common dietary restrictions that may influence

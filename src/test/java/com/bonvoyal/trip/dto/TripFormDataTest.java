@@ -1,8 +1,9 @@
-package com.bonvoyal.tripform.dto;
+package com.bonvoyal.trip.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.bonvoyal.trip.enums.HobbyType;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -15,36 +16,37 @@ class TripFormDataTest {
         TripFormData data = new TripFormData();
         Date start = new Date();
         Date end = new Date();
-        List<String> interests = Arrays.asList("beaches", "food");
+        List<HobbyType> hobbies = Arrays.asList(HobbyType.BEACHES,
+                HobbyType.FOOD);
 
         data.setDestination("Barcelona");
         data.setStartDate(start);
         data.setEndDate(end);
-        data.setInterests(interests);
+        data.setHobbies(hobbies);
 
         assertEquals("Barcelona", data.getDestination());
         assertEquals(start, data.getStartDate());
         assertEquals(end, data.getEndDate());
-        assertEquals(interests, data.getInterests());
+        assertEquals(hobbies, data.getHobbies());
     }
 
     @Test
     void testEqualsAndHashCode() {
         Date start = new Date();
         Date end = new Date();
-        List<String> interests = Arrays.asList("history", "jazz");
+        List<HobbyType> hobbies = Arrays.asList(HobbyType.HISTORY, HobbyType.JAZZ);
 
         TripFormData data1 = new TripFormData();
         data1.setDestination("Paris");
         data1.setStartDate(start);
         data1.setEndDate(end);
-        data1.setInterests(interests);
+        data1.setHobbies(hobbies);
 
         TripFormData data2 = new TripFormData();
         data2.setDestination("Paris");
         data2.setStartDate(start);
         data2.setEndDate(end);
-        data2.setInterests(interests);
+        data2.setHobbies(hobbies);
 
         assertEquals(data1, data2);
         assertEquals(data1.hashCode(), data2.hashCode());
@@ -56,10 +58,10 @@ class TripFormDataTest {
         data.setDestination("Tokyo");
         data.setStartDate(new Date());
         data.setEndDate(new Date());
-        data.setInterests(Arrays.asList("food", "culture"));
+        data.setHobbies(Arrays.asList(HobbyType.FOOD, HobbyType.HIKING));
 
         String str = data.toString();
         assertTrue(str.contains("Tokyo"));
-        assertTrue(str.contains("food"));
+        assertTrue(str.contains("HIKING"));
     }
 }

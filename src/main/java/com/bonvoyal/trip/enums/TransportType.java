@@ -1,4 +1,4 @@
-package com.bonvoyal.tripform.enums;
+package com.bonvoyal.trip.enums;
 
 /**
  * Enum representing different modes of transportation preferences for a trip.
