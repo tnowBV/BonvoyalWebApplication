@@ -6,10 +6,24 @@ plugins {
     id 'jacoco'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.14'
+    id 'com.avast.gradle.docker-compose' version '0.17.12'
 }
+import com.avast.gradle.dockercompose.RemoveImages
 
 checkstyle {
     toolVersion = project.findProperty("checkstyle.version")
+}
+
+dockerCompose {
+    projectName = "BonvoyalWebApplication"
+    useComposeFiles = ['docker-compose.yml']
+    startedServices = ['postgres', 'bonvoyal-app']
+    stopContainers = true
+    removeContainers = true
+    removeImages = RemoveImages.Local
+    executable = "/Applications/Docker.app/Contents/Resources/bin/docker-compose"
+    dockerExecutable = "/Applications/Docker.app/Contents/Resources/bin/docker"
+
 }
 
 checkstyleMain {
@@ -93,6 +107,8 @@ dependencies {
     implementation 'org.hibernate.orm:hibernate-core:6.3.1.Final'
     implementation 'org.openjfx:javafx-controls:21'
     implementation 'org.openjfx:javafx-fxml:21'
+    implementation 'software.amazon.awssdk:sqs:2.25.15'
+    implementation 'software.amazon.awssdk:sns:2.25.15'
 
     runtimeOnly 'org.postgresql:postgresql'
 

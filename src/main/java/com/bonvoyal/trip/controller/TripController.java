@@ -3,7 +3,7 @@ package com.bonvoyal.trip.controller;
 import com.bonvoyal.trip.entities.Trip;
 import com.bonvoyal.trip.service.TripService;
 import java.util.List;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,14 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * <p>All endpoints are prefixed with <code>/api</code>.</p>
  *
- * <p><b>Note:</b> The use of {@code @CrossOrigin(origins = "*")} allows all origins
- * during development. Consider restricting origins in production.</p>
- *
  * @author tnowBV
  */
+@Slf4j
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*") // Allow all origins for dev
 public class TripController {
 
     private final TripService tripService;

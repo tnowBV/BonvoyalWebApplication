@@ -18,7 +18,30 @@ services:
       - trip-network
     profiles:
       - dev
-      - pre_deployment
+
+  bonvoyal-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - AWS_PROFILE=${AWS_PROFILE}
+      - TRIP_FORM_SUBMISSION_SNS_ARN=${TRIP_FORM_SUBMISSION_SNS_ARN}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SPRING_PROFILES_ACTIVE=dev
+
+    volumes:
+      - ~/.aws:/root/.aws:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - trip-network
+
 volumes:
   postgres_data:
 

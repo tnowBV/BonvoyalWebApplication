@@ -2,15 +2,18 @@ package com.bonvoyal.trip.controller;
 
 import com.bonvoyal.trip.dto.TripFormData;
 import com.bonvoyal.trip.entities.Trip;
+import com.bonvoyal.trip.service.PublishTripFormToSnsService;
 import com.bonvoyal.trip.service.TripService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import software.amazon.awssdk.services.sns.model.SnsException;
 
 /**
  * REST controller for handling trip form submissions.
@@ -27,11 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*") // Allow all origins for dev
 public class TripFormController {
 
     @Autowired
     TripService tripService;
+
+    @Autowired
+    PublishTripFormToSnsService publishTripFormToSnsService;
 
     /**
      * Handles POST requests for trip form submission.
@@ -46,10 +51,26 @@ public class TripFormController {
     @PostMapping("/submit")
     public ResponseEntity<String> handleSubmit(@RequestBody final TripFormData formData) {
         if (tripService.validateForm(formData)) {
-            final Trip savedTrip = tripService.saveTrip(tripService.convertDtoToEntity(formData));
-            return ResponseEntity.ok("Form received! Here is your trip ID: " + savedTrip.getId());
+            final ObjectMapper mapper = new ObjectMapper();
+            try {
+                final Trip savedTrip = tripService.saveTrip(
+                        tripService.convertDtoToEntity(formData));
+
+                publishTripFormToSnsService.publishMessage(mapper.writeValueAsString(formData));
+
+                return ResponseEntity.ok("Form received! Here is your trip ID: "
+                        + savedTrip.getId());
+
+            } catch (JsonProcessingException jsonProcessingException) {
+                log.error(jsonProcessingException.getMessage());
+                //TODO: replace with internal issues codes JIRA Story: PB-15
+                return ResponseEntity.internalServerError().body("There was an internal issue");
+            } catch (SnsException snsException) {
+                log.error(snsException.getMessage());
+                return ResponseEntity.internalServerError().body("There was an internal issue");
+            }
         } else {
-            return ResponseEntity.badRequest().body("Form validation failed!");
+            return ResponseEntity.badRequest().body("Bad Request: Form validation failed");
         }
     }
 

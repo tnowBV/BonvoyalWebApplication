@@ -1,5 +1,6 @@
 package com.bonvoyal.trip.controller;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -8,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bonvoyal.trip.dto.TripFormData;
 import com.bonvoyal.trip.entities.Trip;
 import com.bonvoyal.trip.enums.HobbyType;
+import com.bonvoyal.trip.service.PublishTripFormToSnsService;
 import com.bonvoyal.trip.service.TripService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
@@ -19,17 +21,27 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+/**
+ * Unit tests for {@link TripFormController}.
+ */
 class TripFormControllerTest {
 
     private MockMvc mockMvc;
     private TripService tripService;
+    private PublishTripFormToSnsService publishTripFormToSnsService;
     private ObjectMapper objectMapper;
 
+    /**
+     * Sets up the test dependencies and controller.
+     */
     @BeforeEach
     void setup() {
         tripService = Mockito.mock(TripService.class);
+        publishTripFormToSnsService = Mockito.mock(PublishTripFormToSnsService.class);
+
         TripFormController controller = new TripFormController();
         controller.tripService = tripService;
+        controller.publishTripFormToSnsService = publishTripFormToSnsService;
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         objectMapper = new ObjectMapper();
@@ -37,7 +49,6 @@ class TripFormControllerTest {
 
     @Test
     void testHandleSubmit_successfulSubmission_returnsOk() throws Exception {
-        // Prepare form data
         TripFormData formData = new TripFormData();
         formData.setDestination("Tokyo");
         formData.setStartDate(new Date());
@@ -47,24 +58,22 @@ class TripFormControllerTest {
         formData.setDietaryRestrictions(List.of());
         formData.setTransportPreferences(List.of());
 
-        // Prepare expected Trip object
         Trip convertedTrip = new Trip();
         convertedTrip.setId(1L);
 
-        // Mock service methods
         when(tripService.validateForm(formData)).thenReturn(true);
         when(tripService.convertDtoToEntity(formData)).thenReturn(convertedTrip);
         when(tripService.saveTrip(convertedTrip)).thenReturn(convertedTrip);
 
-        // Convert form to JSON
         String json = objectMapper.writeValueAsString(formData);
 
-        // Perform POST request
         mockMvc.perform(post("/api/submit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Form received! Here is your trip ID: 1"));
+
+        verify(publishTripFormToSnsService).publishMessage(json);
     }
 
     @Test
@@ -80,6 +89,6 @@ class TripFormControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Form validation failed!"));
+                .andExpect(content().string("Bad Request: Form validation failed"));
     }
 }
