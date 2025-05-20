@@ -23,7 +23,7 @@ Bonvoyal is a Spring Boot-based web application designed to facilitate trip plan
 * Docker & Docker Compose
 * Gradle
 * AWS SDK
-* GitHub Actions([GitHub][1])
+* GitHub Actions
 
 ---
 
@@ -34,7 +34,7 @@ Bonvoyal is a Spring Boot-based web application designed to facilitate trip plan
 * Java 17
 * Docker & Docker Compose
 * Gradle
-* AWS CLI (for AWS integrations)([GitHub][1])
+* AWS CLI (for AWS integrations)
 
 ### Environment Variables
 
@@ -51,7 +51,6 @@ AWS_REGION=your_aws_region
 AWS_PROFILE=your_aws_profile
 TRIP_FORM_SUBMISSION_SNS_ARN=your_sns_arn
 PROFILE=dev
-APP_CORS_ALLOWED_ORIGINS=http://localhost:3000
 ```
 
 
@@ -104,7 +103,6 @@ Test reports will be generated in `build/reports/tests/test/index.html`.
 ## 🔐 Security Considerations
 
 * **AWS Credentials**: Avoid using root AWS credentials. Instead, create IAM users with minimal required permissions and configure them using the AWS CLI.
-* **CORS Configuration**: In development, all origins are allowed. For production, set `APP_CORS_ALLOWED_ORIGINS` to your frontend's domain to restrict access.
 * **Sensitive Data**: Ensure that `.env` files and other sensitive information are not committed to version control.
 
 ---
