@@ -46,8 +46,6 @@ DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
 DB_PORT=5432
 DB_HOST=localhost
-
-AWS_REGION=your_aws_region
 AWS_PROFILE=your_aws_profile
 TRIP_FORM_SUBMISSION_SNS_ARN=your_sns_arn
 ```

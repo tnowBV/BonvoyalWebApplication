@@ -136,6 +136,7 @@
         });
     });
 
+
     document.getElementById('onboardingForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = {
@@ -145,7 +146,9 @@
             endDate: document.getElementById('endDate').value,
             hobbies: Array.from(document.getElementById('hobbies').selectedOptions).map(opt => opt.value),
             dietaryRestrictions: Array.from(document.getElementById('dietaryRestrictions').selectedOptions).map(opt => opt.value),
-            transportPreferences: Array.from(document.getElementById('transportPreferences').selectedOptions).map(opt => opt.value)
+            transportPreferences: Array.from(document.getElementById('transportPreferences').selectedOptions).map(opt => opt.value),
+            zoneRegion: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timeCreated: Date.now()
         };
 
         fetch('/api/submit', {

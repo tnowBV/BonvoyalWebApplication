@@ -62,4 +62,14 @@ public class TripFormData {
      * A list of user-selected transportation preferences.
      */
     private List<TransportType> transportPreferences;
+
+    /**
+     * The timezone of the user.
+     */
+    private String zoneRegion;
+
+    /**
+     * The timestamp for when the form was submitted.
+     */
+    private Long timeCreated;
 }

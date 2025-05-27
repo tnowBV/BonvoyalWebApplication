@@ -1,4 +1,4 @@
-name: Deploy to Beta
+name: Deploy to Prod
 on:
   workflow_run:
     workflows: [ 'Validate' ]
@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Beta
+      - name: Deploy to Prod
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
           service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}

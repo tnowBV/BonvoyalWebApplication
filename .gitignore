@@ -10,6 +10,7 @@ build/
 .classpath
 .factorypath
 .gradle
+.env
 .project
 .settings
 .springBeans

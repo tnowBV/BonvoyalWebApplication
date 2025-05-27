@@ -117,6 +117,18 @@ public class Trip {
     private List<TransportType> transportPreferences;
 
 
+    /**
+     * Time zone region of user.
+     */
+    @Column(name = "zone_region", columnDefinition = "TEXT")
+    private String zoneRegion;
+
+    /**
+     * Time form was submitted
+     */
+
+    @Column(name = "timeCreated", columnDefinition = "BIGINT")
+    private Long timeCreated;
 
     /**
      * Arbitrary extra data stored in JSON format.

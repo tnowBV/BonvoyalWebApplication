@@ -71,6 +71,8 @@ public class TripService {
         trip.setHobbies(formData.getHobbies());
         trip.setDietaryRestrictions(formData.getDietaryRestrictions());
         trip.setTransportPreferences(formData.getTransportPreferences());
+        trip.setZoneRegion(formData.getZoneRegion());
+        trip.setTimeCreated(formData.getTimeCreated());
         trip.setExtraData(new HashMap<>());
         return trip;
     }
